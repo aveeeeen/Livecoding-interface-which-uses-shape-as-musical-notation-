@@ -1,6 +1,6 @@
 //key interactions
-int timeState = 0;
-int state = 0;
+int state,keystate = 0;
+boolean mouseReleased;
 SoundObject temp;
 
 
@@ -51,50 +51,27 @@ void keyPressed() {
         break;   
     }
   */
-  if (timeState > 1 && timeState < 6) {
-    switch(key) {
-    case'n':
-      if (state == 0) {
-        s.add(new SoundObject(ui.getShapeType(), ui.getSample()));
-        state = 1;
-        println(s, ui.getShapeType(), soundPath[ui.getSample()].getName());
-      }
-
-      if (state == 1) {
-        for (SoundObject s_ : s) {
-          s_.shape.setEdge(mouseX, mouseY);
-        }
-      }
-      break;
-    }
+  switch(key){
+    case 'n':
+    keystate = 1;
+    break;
   }
-  println(timeState);
 }
 
 void mouseReleased() {
-  timeState = 0;
+  mouseReleased = true;
 }
 
 void keyReleased() {
   switch(key) {
   case 'n':
-    if (state == 1) {
-      for (SoundObject s_ : s) {
-        s_.shape.state = 1;
-        for (int i = 0; i < 15; i++) {
-          println(s_.shape.getEdges(i));
-        }
-      }
-      state = 0;
-      timeState = 0;
-    }
+    keystate = 0;
     break;
   }
 }
 
 //mouse interactions
 void mousePressed() {
-  if (keyPressed && key == 'n') timeState ++;
   //moving the shape (vector translate)
   for (int i = s.size() - 1; i>= 0; i-- ) {
     SoundObject s_ = s.get(i);
@@ -102,4 +79,41 @@ void mousePressed() {
       s_.shape.translate(mouseX, mouseY);
     }
   }
+}
+
+void makeShape(){
+  switch(state){
+      
+      //create new instatnce state
+      case 0:
+        if(keystate == 1 && mouseReleased){
+          s.add(new SoundObject(ui.getShapeType(), ui.getSample()));
+          for (SoundObject s_ : s) {
+            s_.shape.setEdge(mouseX, mouseY);
+          }
+          state = 1;
+          println(s, ui.getShapeType(), soundPath[ui.getSample()].getName());
+        }
+        break;
+      //drawing state
+      case 1:
+        if(keystate == 1 && mouseReleased){
+          for (SoundObject s_ : s) {
+            s_.shape.setEdge(mouseX, mouseY);
+          }
+        }
+        if(keystate == 0) state = 2;
+        break;
+      // finish drawing state
+      case 2:
+        for (SoundObject s_ : s) {
+          s_.shape.state = 1;
+          for (int i = 0; i < 15; i++) {
+            println(s_.shape.getEdges(i));
+          }
+          state = 0;
+        }
+        break;
+    }
+ mouseReleased = false;   
 }

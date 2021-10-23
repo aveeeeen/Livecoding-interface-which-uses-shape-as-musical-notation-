@@ -2,6 +2,7 @@ class UI{
   ControlP5 cp5;
   Button b1,b2;
   DropdownList d1,d2;
+  int pressState = 0;
   
   List l;
   
@@ -20,14 +21,6 @@ class UI{
      .setItemHeight(20)
     ;
     
-    if(dir == null){
-      d1.addItem(null,1);
-    }else{
-      for(int i = 0; i < sourceFile.length; i++){
-        d1.addItem(soundPath[i].getName() ,i);
-      }
-    }
-    
     // dropdown ui element for choosing shape type
     l = Arrays.asList("vect","rect","tri");
     d2 = cp5.addDropdownList("Choose Shape Type")
@@ -40,25 +33,52 @@ class UI{
      .addItem("tri", 2)
     ;
     
+    //ui element for clearing canvas
+    
     b1 = cp5.addButton("clearCanvas")
      .setValue(1)
      .setPosition(width - (x),0)
      .setSize(200,20)
     ;
     
-    /*
-    b2 = b1 = cp5.addButton("loadFiles")
+    //ui element for loading samples
+    
+    b2 = cp5.addButton("loadFiles")
      .setValue(1)
-     .setPosition(x*0,0)
+     .setPosition(width - (x*2),0)
      .setSize(200,20)
     ;
-    */
     
   }
   
   public void loadFiles(){
-    if(b2.isPressed()){
-      selectFolder("Select a folder to process:", "folderSelected");
+    if(b2.isMousePressed()){
+      pressState ++;
+      if(dir != null){
+        for(SoundObject s_ : s){
+          s_.end();
+        }
+        s.removeAll(s);
+      }
+      fileSelected = 0;
+      setupState = 0;
+      if(pressState == 1){
+        selectFolder("Select a folder to process:", "folderSelected"); 
+      }
+    }
+    if(fileSelected == 1 || fileSelected == 2) pressState = 0;
+  }
+  
+  public void updateSampleItems(){
+    d1.clear();
+    if(dir == null){
+      d1.addItem(null,1);
+      fileSelected = 0;
+      setupState = 0;
+    }else{
+      for(int i = 0; i < sourceFile.length; i++){
+        d1.addItem(soundPath[i].getName() ,i);
+      }
     }
   }
   

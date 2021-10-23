@@ -27,10 +27,28 @@ public class SoundObject implements Cloneable
     runAudio();
   }
   
-  public void shapeManipulation(){
+  public void update(){
+    shape.hit(pointA);
+    shape.XYMinMax();
+    shape.distance(pointA,pointB);
+    
+    if (shape.getIsHit()) {
+      if(shape.i > 1){
+        play();
+        if(isTriggered()) runAudio();
+      }
+      //println(s_.shape.getValue());
+    } else {
+      end();
+    }
+    
     shape.setColour(soundPath[path].getColor());
     if(select) shape.setColour(255,0,0);
     if(copied) shape.setColour(0,0,255);
+  }
+  
+  public void render(){
+    
     shape.render();
     shape.printText(soundPath[path].getName(),20,-20);
     debugInfo();
@@ -43,7 +61,7 @@ public class SoundObject implements Cloneable
       sound[path].start(); 
   }
   
-  public boolean isPlaying(){
+  public boolean isTriggered(){
     if(this.soundPlay == 1) return true;
     return false;
   }
@@ -58,7 +76,7 @@ public class SoundObject implements Cloneable
   {
       try {
         gainV = new Glide(ac, 0);
-        g = new Gain(ac, 1, gainV);
+        g = new Gain(ac, 2, gainV);
         g.addInput(sound[path]);
         ac.out.addInput(g);      
       }
@@ -71,6 +89,7 @@ public class SoundObject implements Cloneable
   
   public void play() {
     soundPlay += 1;
+    gainV.setValue(shape.getValue()*0.01);
     //sound[path].pause(false);
   }
   public void end() {

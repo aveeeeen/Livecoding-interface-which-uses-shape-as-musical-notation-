@@ -38,12 +38,8 @@ public class Shape {
       for (int j = 0; j < i; j++) {
         ellipse(edge[j].x, edge[j].y, 5, 5);
       }
-      //XYMinMax();
-      //this.value = getValue();
       ellipse(xMin, yMin, r*2, r*2);
     }
-   
-    
   }
 
   public void printText(String t, int x, int y) {
@@ -127,11 +123,11 @@ public class Shape {
     if(isHit){
       if(i > 2){
         float[] pointY = new float[hitPoint.length];
-        //int counter = 0;
+        int counter = 0;
         for(int j = 0; j < hitPoint.length; j++){
             if(hitPoint[j] != null){
               pointY[j] = hitPoint[j].y;
-              //counter ++;
+              counter ++;
             }else{
               pointY[j] = 0.0;
             }
@@ -147,8 +143,8 @@ public class Shape {
         */
         pointY = sort(pointY);
         pointY = reverse(pointY);
-        if(i % 2 != 0){
-          pointY[i - 1] = 0.0;
+        if(counter % 2 != 0){
+          pointY[counter - 1] = 0.0;
         }
         
         
@@ -181,51 +177,6 @@ public class Shape {
       tempValue = 0.0;
       return tempValue;
     }
-    /*
-    float tempValue = 0.0;
-
-    if (i > 2) {
-      // allocating size to store (float)hitting points
-      float[] tempArray = new float[i];
-      
-      int counter = 0;
-      for (int j = 0; j < hitPoint.length; j++) {
-        if (hitPoint[j] != null) {
-          tempArray[j] = hitPoint[j].y;
-          counter ++;
-        }
-      }
-      // sorting array to make actualvalues fit into pointY[]
-      tempArray = sort(tempArray);
-      float[] pointY = new float[counter];
-      float[] distArray = new float[counter];
-      
-      for (int j = 0; j < counter; j++) {
-        pointY[j] = tempArray[j];
-      }
-      // reversing array into larger value ~ small values in order to calculate the distance of line (y2 - y1)
-      pointY = reverse(pointY);
-      for (int j = 0; j < pointY.length; j++){
-        println(pointY[j]);
-      }
-      for (int j = 0; j < counter/2; j++) {
-        if (j % 2 == 0) {
-          // y2 - y1
-          distArray[j] = pointY[j] - pointY[j+1];
-        }
-      }
-      //summing all distant of y2- y1
-      for (int j = 0; j < distArray.length; j++) {
-        tempValue += distArray[j];
-      }
-    }
-    if (isHit) {
-      return tempValue;
-    } else {
-      tempValue = 0.0;
-      return tempValue;
-    }
-    */
   }
 
   private void XYMinMax () {
@@ -290,7 +241,7 @@ public class Shape {
 
   public void distance (PVector a, PVector a2) {
     if(isHit){
-      for (int j = 0; j < edge.length/2 ;j++) {
+      for (int j = 0; j < i ;j++) {
   
         float x0 = a.x;
         float y0 = a.y;
@@ -333,14 +284,6 @@ public class Shape {
   
         if (t0 != t1 && hit && y2 != 0 && y3 != 0) {
           hitPoint[j] = new PVector(x, y);
-            
-          
-             
-               push();
-               strokeWeight(12);
-               point(hitPoint[j].x,hitPoint[j].y);
-               pop();
-             
           //*/
         }
       }
